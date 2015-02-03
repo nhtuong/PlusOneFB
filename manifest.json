@@ -1,0 +1,11 @@
+{
+    "manifest_version":         2,
+    "content_scripts":          [ {
+        "js":       [ "plus.one.fb.js","jquery.min.js","platform.js" ],
+        "matches":  [   "https://www.facebook.com/*"
+        ]
+    } ],
+    "description":              "+OneFB will add +1 button below each FB post. All articles recommended by +1 button will be appeared on Google Plus profile.",
+    "name":                     "+OneFB: Plus One Button for Facebook",
+    "version":                  "1.0.2"
+}
