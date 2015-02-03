@@ -5,6 +5,10 @@ This Chrome extention will add "Plus One" Button below each Facebook post. All a
 
 For more information about "Plus One" Button: http://goo.gl/ccuoP
 
+Technical supports: https://plus.google.com/u/0/+HoaiTuongNGUYEN
+
 TRACK CHANGES:
+
 (03/02/2011) Adapt to new +One button version.
+
 (18/07/2011) Extract external link instead of FB-permanent link (privacy reason).
