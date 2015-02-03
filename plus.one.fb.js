@@ -48,8 +48,8 @@ function main(){
 	count++;
 	
       if ($(this).next().attr('class')!="onefb" & $(this).next().attr('class')!="sep"){
-			$(this).after("<a class='onefb' href='#'><span id='plusone_container'><span id='g-plusone"+count+"'></span></span></a>");
-			$(this).after("<span class='sep'> · </span>");
+			$(this).after("<a class='onefb' href='#' onclick='popUp=window.open(\"https://plus.google.com/share?url=http://example.com\">Share <span id='plusone_container'><span id='g-plusone"+count+"'></span></span></a>");			
+		$(this).after("<span class='sep'> · </span>");
 			
 			var link=$(this).parent().parent().parent().parent().parent().parent().parent().parent().find("._52c6").attr('onmouseover');
 			link
