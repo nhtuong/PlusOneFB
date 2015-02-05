@@ -27,49 +27,157 @@
 
 
 
-function addOneFB(id){
-
-var div = document.getElementsByClassName(id);
-
-for (var i = 0; i < div.length; ++i) {
-
-
-}
-
-}
-
+	
+  
+  
+  
 
 
 function main(){
 
 	
+	var txt = ".uiStreamSponsoredLink";
+	$('.userContentWrapper').each(function(){
+	
+		if ($(this).find(".uiStreamSponsoredLink").attr("class")=="uiStreamSponsoredLink")
+			$(this).find(".uiStreamSponsoredLink").parent().parent().parent().parent().parent().parent().parent().parent().parent().remove();
+		
+     
+    });
+	$('.ego_section').each(function(){
+	
+		if ($(this).find(".adsCategoryTitleLink").attr("class")=="adsCategoryTitleLink")
+			$(this).find(".adsCategoryTitleLink").parent().parent().parent().parent().parent().parent().remove();
+		
+		
+	
+    });	
+	
+
+	var toparticles ={};
+
 	var  count=0;
-	$('.share_action_link').each(function(){
+
+		$('.userContentWrapper').each(function(){
+			var share=$(this).find(".share_action_link");
+			if (share.next().attr('class')!="onefb" & share.next().attr('class')!="sep"){
+			
+			var post=$(this).find("._5pcq").attr("href");
+			var link=$(this).find("._52c6").attr("onmouseover");
+			var title=$(this).find(".mbs").text();
+			var sender=$(this).find(".fwb");
+			var sharepanel=$(this).find(".share_action_link").parent();
+			
+			
+//alert(title);//
+			
+			if (typeof link==="undefined"){
+				link=post;
+				//if (link.indexOf("facebook.com")==-1)
+						link="https://www.facebook.com"+link;			
+			} else{
+					link=link.substring(29,link.length-3);				
+					link=link.replace(/\\/g, "");
+					link=link.replace("\"", "");
+								
+				}
+			var id=MD5(link);
+			var fbjsonurl="https://api.facebook.com/method/links.getStats?urls="+link+"&format=json";
+			var twjsonurl="https://urls.api.twitter.com/1/urls/count.json?url="+link;
+			var linkedinjsonurl="https://www.linkedin.com/countserv/count/share?url="+link+"&format=json";
+			
+		
+			var gpbutton="<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>";		
+			
+			$.getJSON(fbjsonurl, function( data ) {
+				$.each( data, function( key, val ) {				
+					toparticles["url"]= val.url;
+					toparticles["share_count"]= val.share_count;
+					
+	
+					if (val.like_count>500 | val.comment_count>500 ){
+					
+						$('.rightColumnWrapper').each(function(){		
+						var ego_section = $(this).find("#pagelet_reminders");
+						//alert(ego_section.attr("class"));
+						if (ego_section.attr("id")=="pagelet_reminders"){
+							if ($(this).next().attr('class')!="reco"){
+								$(this).after("<h8 class='reco' id='reco' aria-hidden='true'>RECOMMENDATIONS<br></h8>");
+							} 
+							//alert($('.recoi').attr('title')==title);
+							if($('div.recoi:contains('+title+')').length==0){
+
+								$('.reco').after("<div class='recoi'><li  aria-hidden='true' title="+title+"><b>"+sender.html()+"</b> : <a href='"+val.url+"' target='_blank'>"+title +"</a> <i class='UFIBlingBoxLikeIcon UFIBlingBoxSprite'></i>"+val.like_count+"<i class='mls UFIBlingBoxCommentIcon UFIBlingBoxSprite'></i>"+val.comment_count+"<i class='mls UFIBlingBoxReshareIcon UFIBlingBoxSprite'></i>"+val.share_count+"</li> "+sharepanel.html()+gpbutton+" </div>");
+							
+						    }
+
+								
+							}
+						});	
+		
+	
+					}
+				});  			
+				
+			 });
+			 
+			 
+			
+			share.after("<a class='onefb' onclick='popUp=window.open(\"https://plus.google.com/share?url="+link+"\")'>Share on Google+</a>");									
+
+			share.after("<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>");					
+			share.after("<span class='sep'> · </span>");			
+		
+			gapi.plusone.render("g-plusone"+id, { "href": link, "size":"small","annotation":"bubble" });
+			
+			}
+			//alert($(this).find(".share_action_link").attr("href"));
+			
+		});	
+		
+		
+	
+
+	
+	
+	
+	
+	
+
+	
+	
+	/*$('.share_action_link').each(function(){
 	count++;
 	
       if ($(this).next().attr('class')!="onefb" & $(this).next().attr('class')!="sep"){
-			$(this).after("<a class='onefb' href='#' onclick='popUp=window.open(\"https://plus.google.com/share?url=http://example.com\">Share <span id='plusone_container'><span id='g-plusone"+count+"'></span></span></a>");			
-		$(this).after("<span class='sep'> · </span>");
-			
+	  		
 			var link=$(this).parent().parent().parent().parent().parent().parent().parent().parent().find("._52c6").attr('onmouseover');
-			link
+			
+		
 			if (typeof link==="undefined"){
 				link=$(this).parent().parent().parent().parent().parent().parent().parent().parent().find("._5pcq").attr('href');
-				if (link.indexOf("facebook.com")==-1)
-					link="https://www.facebook.com"+link;
+				//if (link.indexOf("facebook.com")==-1)
+					//link="https://www.facebook.com"+link;
 			}
 			else{
-				link=link.substring(29,link.length-3);
-				link=link.replace(/[/\*]/g, "");
+				link=link.substring(29,link.length-3);				
+				link=link.replace(/\\/g, "");
 				link=link.replace("\"", "");				
 			}
-			
-			gapi.plusone.render("g-plusone"+count, { "href": link, "size":"small","annotation":"bubble" });
+		
+		var id=MD5(link);
+		//alert(id);
+		$(this).after("<a class='onefb' onclick='popUp=window.open(\"https://plus.google.com/share?url="+link+"\")'>Share on Google+</a>");									
+
+		$(this).after("<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>");					
+		$(this).after("<span class='sep'> · </span>");			
+	
+		gapi.plusone.render("g-plusone"+id, { "href": link, "size":"small","annotation":"bubble" });
 			
 			
 		
 		}		
-    });	
+    });	*/
 	
 }
 
