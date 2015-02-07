@@ -27,15 +27,15 @@
 
 
 
-	
-  
   
   
 
 
 function main(){
 
+
 	
+  
 	var txt = ".uiStreamSponsoredLink";
 	$('.userContentWrapper').each(function(){
 	
@@ -54,13 +54,14 @@ function main(){
     });	
 	
 
+
 	var toparticles ={};
 
 	var  count=0;
 
 		$('.userContentWrapper').each(function(){
 			var share=$(this).find(".share_action_link");
-			if (share.next().attr('class')!="onefb" & share.next().attr('class')!="sep"){
+			if (share.parent().parent().find(".onefb").attr('class')!="onefb" & share.next().attr('class')!="sep"){
 			
 			var post=$(this).find("._5pcq").attr("href");
 			var link=$(this).find("._52c6").attr("onmouseover");
@@ -69,7 +70,7 @@ function main(){
 			var sharepanel=$(this).find(".share_action_link").parent();
 			
 			
-//alert(title);//
+			//alert(title);//
 			
 			if (typeof link==="undefined"){
 				link=post;
@@ -86,9 +87,21 @@ function main(){
 			var twjsonurl="https://urls.api.twitter.com/1/urls/count.json?url="+link;
 			var linkedinjsonurl="https://www.linkedin.com/countserv/count/share?url="+link+"&format=json";
 			
-		
-			var gpbutton="<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>";		
 			
+			
+			var gppane="Share on: "+
+			"<a class=\'onefb\' onclick=\'popUp=window.open(\"https://plus.google.com/share?url="+link+"\")\'><img src='http://tubizou.net/images/icons/googleplus.png'></a>"+ "<span class='sep'>  </span>" +
+			"<a class=\'onefb\' onclick=\'popUp=window.open(\"https://twitter.com/home?status="+title+" "+link+"\")\'><img src='http://tubizou.net/images/icons/twitter.png'></a>"+ "<span class='sep'>  </span>" +
+			"<a class=\'onefb\' onclick=\'popUp=window.open(\"https://www.linkedin.com/shareArticle?mini=true&url="+link+"\")\'><img src='http://tubizou.net/images/icons/linkedin.png'></a>"+ "<span class='sep'>  </span>" +
+			"<a class=\'onefb\' onclick=\'popUp=window.open(\"https://pinterest.com/pin/create/button/?url="+link+"\")\'><img src='http://tubizou.net/images/icons/pinterest.png'></a>";
+						
+			//Save data
+				$.get( "https://tubizou.net/datasets/saveFBToplinks.php?user=tuong&url="+link+"&sharer=nga", function(data) {
+						  //$( ".result" ).html( data );
+						  //alert( "Load was performed." );
+						});
+			/*						
+		
 			$.getJSON(fbjsonurl, function( data ) {
 				$.each( data, function( key, val ) {				
 					toparticles["url"]= val.url;
@@ -107,28 +120,97 @@ function main(){
 							//alert($('.recoi').attr('title')==title);
 							if($('div.recoi:contains('+title+')').length==0){
 
-								$('.reco').after("<div class='recoi'><li  aria-hidden='true' title="+title+"><b>"+sender.html()+"</b> : <a href='"+val.url+"' target='_blank'>"+title +"</a> <i class='UFIBlingBoxLikeIcon UFIBlingBoxSprite'></i>"+val.like_count+"<i class='mls UFIBlingBoxCommentIcon UFIBlingBoxSprite'></i>"+val.comment_count+"<i class='mls UFIBlingBoxReshareIcon UFIBlingBoxSprite'></i>"+val.share_count+"</li> "+sharepanel.html()+gpbutton+" </div>");
-							
-						    }
+								$('.reco').after("<div class='recoi'><li  aria-hidden='true' title="+title+"><b>"+sender.html()+"</b> : <a href='"+val.url+"' target='_blank'>"+title +"</a> </li>"+sharepanel.html()+"<span class='sep'> · </span> <a href='#' class='tipr-"+id+"'>Share+</a> <span class='sep'> · </span> <i class='UFIBlingBoxLikeIcon UFIBlingBoxSprite'></i>"+val.like_count+"<i class='mls UFIBlingBoxCommentIcon UFIBlingBoxSprite'></i>"+val.comment_count+"<i class='mls UFIBlingBoxReshareIcon UFIBlingBoxSprite'></i>"+val.share_count+"  </div>");
+
+
+								$(".tipr-"+id).tooltip({
+									content: gppane,
+									items:"*",
+									position: {
+										my: "center-7 bottom+1",
+										at: "center-7 top-10",
+										using: function( position, feedback ) {
+									  $( this ).css( position );
+									  $( "<div>" )
+										.addClass( "arrow" )
+										.addClass( feedback.vertical )
+										.addClass( feedback.horizontal )
+										.appendTo( this );
+									}
+								  },
+								  hide: { effect: "" }, //fadeOut
+								  close: function(event, ui){
+									ui.tooltip.hover(
+										function () {
+											$(this).stop(true).fadeTo(200, 1); 
+										},
+										function () {
+											$(this).fadeOut("200", function(){
+												$(this).remove(); 
+											})
+										}
+									);
+								  }  
+								});	 						   
+
+						   }
 
 								
 							}
 						});	
 		
+					
+				
 	
 					}
 				});  			
 				
-			 });
+			 });*/
 			 
 			 
-			
-			share.after("<a class='onefb' onclick='popUp=window.open(\"https://plus.google.com/share?url="+link+"\")'>Share on Google+</a>");									
-
-			share.after("<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>");					
-			share.after("<span class='sep'> · </span>");			
 		
-			gapi.plusone.render("g-plusone"+id, { "href": link, "size":"small","annotation":"bubble" });
+			
+			share.parent().after("<span class='onefb'><span class='sep'> · </span> <a href='#' class='tip-"+id+"'>Share+</a></span>");
+						
+		
+		
+			/*share.after("<a class='onefb' onclick='popUp=window.open(\"https://plus.google.com/share?url="+link+"\")'>Share on Google+</a>");									
+			share.after("<span id='plusone_container'><span id='g-plusone"+id+"'></span></span>");					
+			share.after("<span class='sep'> · </span>");	*/		
+		
+			//gapi.plusone.render("g-plusone"+id, { "href": link, "size":"small","annotation":"bubble" });	
+		
+			$(".tip-"+id).tooltip({
+				content: gppane,
+				items:"*",	
+				position: {
+				my: "center-7 bottom+1",
+				at: "center-7 top-10",
+				using: function( position, feedback ) {
+				  $( this ).css( position );
+				  $( "<div>" )
+					.addClass( "arrow" )
+					.addClass( feedback.vertical )
+					.addClass( feedback.horizontal )
+					.appendTo( this );
+				}
+			  },				
+			  hide: { effect: "" }, //fadeOut
+			  close: function(event, ui){
+				ui.tooltip.hover(
+					function () {
+						$(this).stop(true).fadeTo(200, 1); 
+					},
+					function () {
+						$(this).fadeOut("200", function(){
+							$(this).remove(); 
+						})
+					}
+				);
+			  }  
+			});	 
+							
+			
 			
 			}
 			//alert($(this).find(".share_action_link").attr("href"));
